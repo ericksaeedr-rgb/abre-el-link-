@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Quieres ser mi novia?</title>
+    <title>Sorpresita :3</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style3.css">
+    <link rel="stylesheet" href="style2.css">
     <meta name="theme-color" content="#FF6B9A">
 </head>
 <body>
@@ -32,70 +32,85 @@
     </template>
 
     <script>
+        // Mover botón "No" cuando el ratón se acerca
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
         const response = document.getElementById('response');
-        const actions = document.querySelector('.actions');
-        const heartTpl = document.getElementById('heartTpl');
 
-        noBtn.disabled = true;
-
-        let offsetX = 0;
-        let offsetY = 0;
-        const THRESHOLD = 110;
-        const STEP = 18;
-
-        function getPointer(e) {
-            return e.touches && e.touches[0] ? e.touches[0] : e;
+        function randomPositionWithin(container, el) {
+            const rect = container.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            const padding = 20;
+            const maxX = rect.width - elRect.width - padding;
+            const maxY = rect.height - elRect.height - padding;
+            const x = Math.max(padding, Math.random() * maxX);
+            const y = Math.max(padding, Math.random() * maxY);
+            return {x, y};
         }
 
-        function moveNoButton(pointer) {
-            const btnRect = noBtn.getBoundingClientRect();
-            const actionRect = actions.getBoundingClientRect();
-            const btnCenterX = btnRect.left + btnRect.width / 2;
-            const btnCenterY = btnRect.top + btnRect.height / 2;
-            const dx = btnCenterX - pointer.clientX;
-            const dy = btnCenterY - pointer.clientY;
-            const dist = Math.hypot(dx, dy);
-
-            if (dist < THRESHOLD) {
-                const nx = dx / (dist || 1);
-                const ny = dy / (dist || 1);
-                const maxX = (actionRect.width - btnRect.width) / 2 - 8;
-                const maxY = (actionRect.height - btnRect.height) / 2 - 8;
-                offsetX = Math.max(-maxX, Math.min(maxX, offsetX + nx * STEP));
-                offsetY = Math.max(-maxY, Math.min(maxY, offsetY + ny * STEP));
-                noBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-            }
-        }
-
-        actions.addEventListener('mousemove', moveNoButton);
-        actions.addEventListener('touchmove', (e) => {
-            moveNoButton(getPointer(e));
-        }, { passive: true });
-
-        function resetNoButton() {
-            offsetX = 0;
-            offsetY = 0;
-            noBtn.style.transform = 'translate(-50%, -50%)';
-        }
-
-        actions.addEventListener('mouseleave', resetNoButton);
-        actions.addEventListener('touchend', resetNoButton);
-
-        yesBtn.addEventListener('click', () => {
-            const heart = heartTpl.content.firstElementChild.cloneNode(true);
-            document.body.appendChild(heart);
-            const rect = yesBtn.getBoundingClientRect();
-            heart.style.left = `${rect.left + rect.width / 2}px`;
-            heart.style.top = `${rect.top + rect.height / 2}px`;
-            void heart.offsetWidth;
-            heart.classList.add('pop');
-            response.classList.add('visible');
-            setTimeout(() => heart.remove(), 1500);
-        });
-
-        window.addEventListener('resize', resetNoButton);
+const actions = document.querySelector('.actions');
+         // Deshabilitar botón "No" para que no sea clicable, pero siga reaccionando al cursor
+         noBtn.disabled = true;
+ 
+         // Parámetros del comportamiento evasivo (suave)
+         const THRESHOLD = 140; // px distancia a la que empieza a moverse
+         const STEP = 18; // px constante por movimiento
+         let offsetX = 0;
+         let offsetY = 0;
+ 
+         actions.addEventListener('mousemove', (e) => {
+             const btnRect = noBtn.getBoundingClientRect();
+             const btnX = btnRect.left + btnRect.width / 2;
+             const btnY = btnRect.top + btnRect.height / 2;
+ 
+             let dx = btnX - e.clientX;
+             let dy = btnY - e.clientY;
+             const dist = Math.hypot(dx, dy);
+ 
+             if (dist < THRESHOLD) {
+                 const nx = dx / (dist || 1);
+                 const ny = dy / (dist || 1);
+                 const windowWidth = window.innerWidth;
+                 const windowHeight = window.innerHeight;
+                 offsetX = Math.max(-windowWidth / 2 + btnRect.width / 2, Math.min(windowWidth / 2 - btnRect.width / 2, offsetX + nx * STEP));
+                 offsetY = Math.max(-windowHeight / 2 + btnRect.height / 2, Math.min(windowHeight / 2 - btnRect.height / 2, offsetY + ny * STEP));
+                 noBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+             }
+         });
+ 
+         actions.addEventListener('mouseleave', () => {
+             noBtn.style.transform = 'translate(-50%, -50%)';
+             offsetX = 0;
+             offsetY = 0;
+         });
+ 
+         // Animación de corazón y mostrar respuesta al hacer click en Sí
+         yesBtn.addEventListener('click', (e) => {
+             // Crear corazón animado
+             const tpl = document.getElementById('heartTpl');
+             const heart = tpl.content.firstElementChild.cloneNode(true);
+             document.body.appendChild(heart);
+ 
+             // Posicionar en donde se hizo click
+             const rect = yesBtn.getBoundingClientRect();
+             heart.style.left = (rect.left + rect.width / 2) + 'px';
+             heart.style.top = (rect.top + rect.height / 2) + 'px';
+ 
+             // Forzar reflow para lanzar la animación
+             void heart.offsetWidth;
+             heart.classList.add('pop');
+ 
+             // Mostrar texto de respuesta
+             response.classList.add('visible');
+ 
+             // Eliminar corazón tras la animación
+             setTimeout(() => heart.remove(), 1500);
+         });
+ 
+         // Reiniciar transform cuando cambie tamaño para evitar posiciones rotas
+         window.addEventListener('resize', () => {
+             noBtn.style.transform = 'translate(-50%, -50%)';
+         });
     </script>
 </body>
 </html>
