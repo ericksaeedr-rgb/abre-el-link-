@@ -1,96 +1,109 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorpresita :3</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti ❤️</title>
+
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
+<div class="card">
 
-    <div class="card">
-        <h1>¿Quieres ser mi novia? ❤️</h1>
-        <p>No lo pienses demasiado... 😳</p>
+```
+<div class="heart-top">❤️</div>
 
-        <div class="buttons">
-            <button id="yesBtn">Sí ❤️</button>
-            <button id="noBtn">No 😔</button>
-        </div>
+<h1>¿Quieres ser mi novia?</h1>
 
-        <div id="message">
-            <h2>Sabía que dirías que sí ❤️✨</h2>
-        </div>
-    </div>
+<p class="subtitle">
+    Tengo una pregunta muy importante para ti... 🥺
+</p>
+
+<div class="buttons">
+    <button id="yesBtn">Sí ❤️</button>
+    <button id="noBtn">No 😔</button>
+</div>
+
+<div id="message">
+    <h2>¡Me haces muy feliz! ❤️</h2>
+    <p>
+        Gracias por aceptar. Prometo darte muchos momentos bonitos ✨
+    </p>
+</div>
+```
 
 </div>
 
 <script>
 
-const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
 
-function moveButton() {
+function moveButton(){
 
-    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+    const card = document.querySelector(".card");
+
+    const maxX = card.offsetWidth - noBtn.offsetWidth - 40;
+    const maxY = 150;
 
     const x = Math.random() * maxX;
     const y = Math.random() * maxY;
 
-    noBtn.style.position = "fixed";
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 }
 
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("mousemove",(e)=>{
 
     const rect = noBtn.getBoundingClientRect();
 
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const centerX = rect.left + rect.width/2;
+    const centerY = rect.top + rect.height/2;
 
     const distance = Math.hypot(
-        e.clientX - centerX,
-        e.clientY - centerY
+        e.clientX-centerX,
+        e.clientY-centerY
     );
 
-    if(distance < 120){
+    if(distance < 100){
         moveButton();
     }
 });
 
-noBtn.addEventListener("touchstart", (e) => {
+noBtn.addEventListener("touchstart",(e)=>{
     e.preventDefault();
     moveButton();
 });
 
-noBtn.addEventListener("click", (e) => {
+noBtn.addEventListener("click",(e)=>{
     e.preventDefault();
     moveButton();
 });
 
-yesBtn.addEventListener("click", () => {
+yesBtn.addEventListener("click",()=>{
 
-    message.style.display = "block";
+    document.querySelector(".buttons").style.display="none";
 
-    for(let i = 0; i < 20; i++){
+    message.style.display="block";
 
-        const heart = document.createElement("div");
+    for(let i=0;i<30;i++){
 
-        heart.innerHTML = "❤️";
+        const heart=document.createElement("div");
+
         heart.classList.add("heart");
+        heart.innerHTML="❤️";
 
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.top = window.innerHeight + "px";
+        heart.style.left=Math.random()*window.innerWidth+"px";
+        heart.style.top=window.innerHeight+"px";
 
         document.body.appendChild(heart);
 
-        setTimeout(() => {
+        setTimeout(()=>{
             heart.remove();
-        }, 3000);
+        },3000);
     }
 });
 
