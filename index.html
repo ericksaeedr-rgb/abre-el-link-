@@ -39,6 +39,7 @@
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
+let moved = false;
 
 function moveButton() {
 
@@ -47,7 +48,6 @@ function moveButton() {
 
     noBtn.style.transform =
         `translate(${x}px, ${y}px)`;
-    let moved = false;
 }
 
 document.addEventListener("mousemove",(e)=>{
@@ -67,26 +67,9 @@ document.addEventListener("mousemove",(e)=>{
     }
 });
 
-noBtn.addEventListener("touchstart",(e)=>{
+noBtn.addEventListener("pointerdown",(e)=>{
     e.preventDefault();
-
-    if(!moved){
-        moved = true;
-        moveButton();
-    }else{
-        moveButton();
-    }
-});
-
-noBtn.addEventListener("click",(e)=>{
-    e.preventDefault();
-
-    if(!moved){
-        moved = true;
-        moveButton();
-    }else{
-        moveButton();
-    }
+    moveButton();
 });
 
 yesBtn.addEventListener("click",()=>{
