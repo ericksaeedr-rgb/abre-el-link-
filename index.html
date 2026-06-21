@@ -46,13 +46,12 @@ function moveButton(){
 
     const container = document.querySelector(".buttons");
 
-    const maxX = container.offsetWidth - noBtn.offsetWidth;
-    const maxY = 10;
+    const maxX = container.clientWidth - noBtn.offsetWidth;
 
-    const x = Math.random() * Math.max(maxX, 50);
+    const x = Math.random() * maxX;
 
     noBtn.style.left = x + "px";
-    noBtn.style.top = maxY + "px";
+    noBtn.style.top = "10px";
 }
 
 document.addEventListener("mousemove",(e)=>{
