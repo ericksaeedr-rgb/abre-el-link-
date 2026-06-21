@@ -42,11 +42,12 @@ const message = document.getElementById("message");
 
 function moveButton() {
 
-    const x = Math.random() * 220 - 110;
-    const y = Math.random() * 80 - 40;
+    const x = Math.random() * 160 - 80;
+    const y = Math.random() * 120 - 60;
 
     noBtn.style.transform =
         `translate(${x}px, ${y}px)`;
+    let moved = false;
 }
 
 document.addEventListener("mousemove",(e)=>{
@@ -68,12 +69,24 @@ document.addEventListener("mousemove",(e)=>{
 
 noBtn.addEventListener("touchstart",(e)=>{
     e.preventDefault();
-    moveButton();
+
+    if(!moved){
+        moved = true;
+        moveButton();
+    }else{
+        moveButton();
+    }
 });
 
 noBtn.addEventListener("click",(e)=>{
     e.preventDefault();
-    moveButton();
+
+    if(!moved){
+        moved = true;
+        moveButton();
+    }else{
+        moveButton();
+    }
 });
 
 yesBtn.addEventListener("click",()=>{
