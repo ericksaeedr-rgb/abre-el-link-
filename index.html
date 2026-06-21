@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quieres ser mi novia?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style3.css">
+    <meta name="theme-color" content="#FF6B9A">
+</head>
+<body>
+    <main class="page">
+        <div class="card">
+            <h1 class="headline">¿Quieres ser mi novia?</h1>
+            <p class="subtitle">Tenía que preguntarlo... pero tú decides ✨</p>
+
+            <div class="actions">
+                <button class="btn btn-no" id="noBtn">No</button>
+                <button class="btn btn-yes" id="yesBtn">Sí</button>
+            </div>
+
+            <div id="response" class="response" aria-live="polite">
+                <h2>Sabía que dirías que sí, mi amor ❤️</h2>
+            </div>
+        </div>
+    </main>
+
+    <template id="heartTpl">
+        <div class="heart">❤</div>
+    </template>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const response = document.getElementById('response');
+        const actions = document.querySelector('.actions');
+        const heartTpl = document.getElementById('heartTpl');
+
+        noBtn.disabled = true;
+
+        let offsetX = 0;
+        let offsetY = 0;
+        const THRESHOLD = 110;
+        const STEP = 18;
+
+        function getPointer(e) {
+            return e.touches && e.touches[0] ? e.touches[0] : e;
+        }
+
+        function moveNoButton(pointer) {
+            const btnRect = noBtn.getBoundingClientRect();
+            const actionRect = actions.getBoundingClientRect();
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+            const dx = btnCenterX - pointer.clientX;
+            const dy = btnCenterY - pointer.clientY;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < THRESHOLD) {
+                const nx = dx / (dist || 1);
+                const ny = dy / (dist || 1);
+                const maxX = (actionRect.width - btnRect.width) / 2 - 8;
+                const maxY = (actionRect.height - btnRect.height) / 2 - 8;
+                offsetX = Math.max(-maxX, Math.min(maxX, offsetX + nx * STEP));
+                offsetY = Math.max(-maxY, Math.min(maxY, offsetY + ny * STEP));
+                noBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
+            }
+        }
+
+        actions.addEventListener('mousemove', moveNoButton);
+        actions.addEventListener('touchmove', (e) => {
+            moveNoButton(getPointer(e));
+        }, { passive: true });
+
+        function resetNoButton() {
+            offsetX = 0;
+            offsetY = 0;
+            noBtn.style.transform = 'translate(-50%, -50%)';
+        }
+
+        actions.addEventListener('mouseleave', resetNoButton);
+        actions.addEventListener('touchend', resetNoButton);
+
+        yesBtn.addEventListener('click', () => {
+            const heart = heartTpl.content.firstElementChild.cloneNode(true);
+            document.body.appendChild(heart);
+            const rect = yesBtn.getBoundingClientRect();
+            heart.style.left = `${rect.left + rect.width / 2}px`;
+            heart.style.top = `${rect.top + rect.height / 2}px`;
+            void heart.offsetWidth;
+            heart.classList.add('pop');
+            response.classList.add('visible');
+            setTimeout(() => heart.remove(), 1500);
+        });
+
+        window.addEventListener('resize', resetNoButton);
+    </script>
+</body>
+</html>
