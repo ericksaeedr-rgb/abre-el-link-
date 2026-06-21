@@ -3,114 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorpresita :3</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style2.css">
-    <meta name="theme-color" content="#FF6B9A">
+    <title>¿Quieres ser mi novia?</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="page">
-        <div class="card">
-            <h1 class="headline">¿Quieres ser mi novia?</h1>
-            <p class="subtitle">Tenía que preguntarlo... pero tú decides ✨</p>
 
-            <div class="actions">
-                <button class="btn btn-no" id="noBtn">No</button>
-                <button class="btn btn-yes" id="yesBtn">Sí</button>
-            </div>
+<div class="container">
 
-            <div id="response" class="response" aria-live="polite">
-                <h2>Sabía que dirías que sí, mi amor ❤️</h2>
-            </div>
+    <div class="card">
+        <h1>¿Quieres ser mi novia? ❤️</h1>
+        <p>No lo pienses demasiado... 😳</p>
+
+        <div class="buttons">
+            <button id="yesBtn">Sí ❤️</button>
+            <button id="noBtn">No 😔</button>
         </div>
-    </main>
 
-    <template id="heartTpl">
-        <div class="heart">❤</div>
-    </template>
+        <div id="message">
+            <h2>Sabía que dirías que sí ❤️✨</h2>
+        </div>
+    </div>
 
-    <script>
-        // Mover botón "No" cuando el ratón se acerca
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const response = document.getElementById('response');
+</div>
 
-        function randomPositionWithin(container, el) {
-            const rect = container.getBoundingClientRect();
-            const elRect = el.getBoundingClientRect();
-            const padding = 20;
-            const maxX = rect.width - elRect.width - padding;
-            const maxY = rect.height - elRect.height - padding;
-            const x = Math.max(padding, Math.random() * maxX);
-            const y = Math.max(padding, Math.random() * maxY);
-            return {x, y};
-        }
+<script>
 
-const actions = document.querySelector('.actions');
-         // Deshabilitar botón "No" para que no sea clicable, pero siga reaccionando al cursor
-         noBtn.disabled = true;
- 
-         // Parámetros del comportamiento evasivo (suave)
-         const THRESHOLD = 140; // px distancia a la que empieza a moverse
-         const STEP = 18; // px constante por movimiento
-         let offsetX = 0;
-         let offsetY = 0;
- 
-         actions.addEventListener('mousemove', (e) => {
-             const btnRect = noBtn.getBoundingClientRect();
-             const btnX = btnRect.left + btnRect.width / 2;
-             const btnY = btnRect.top + btnRect.height / 2;
- 
-             let dx = btnX - e.clientX;
-             let dy = btnY - e.clientY;
-             const dist = Math.hypot(dx, dy);
- 
-             if (dist < THRESHOLD) {
-                 const nx = dx / (dist || 1);
-                 const ny = dy / (dist || 1);
-                 const windowWidth = window.innerWidth;
-                 const windowHeight = window.innerHeight;
-                 offsetX = Math.max(-windowWidth / 2 + btnRect.width / 2, Math.min(windowWidth / 2 - btnRect.width / 2, offsetX + nx * STEP));
-                 offsetY = Math.max(-windowHeight / 2 + btnRect.height / 2, Math.min(windowHeight / 2 - btnRect.height / 2, offsetY + ny * STEP));
-                 noBtn.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-             }
-         });
- 
-         actions.addEventListener('mouseleave', () => {
-             noBtn.style.transform = 'translate(-50%, -50%)';
-             offsetX = 0;
-             offsetY = 0;
-         });
- 
-         // Animación de corazón y mostrar respuesta al hacer click en Sí
-         yesBtn.addEventListener('click', (e) => {
-             // Crear corazón animado
-             const tpl = document.getElementById('heartTpl');
-             const heart = tpl.content.firstElementChild.cloneNode(true);
-             document.body.appendChild(heart);
- 
-             // Posicionar en donde se hizo click
-             const rect = yesBtn.getBoundingClientRect();
-             heart.style.left = (rect.left + rect.width / 2) + 'px';
-             heart.style.top = (rect.top + rect.height / 2) + 'px';
- 
-             // Forzar reflow para lanzar la animación
-             void heart.offsetWidth;
-             heart.classList.add('pop');
- 
-             // Mostrar texto de respuesta
-             response.classList.add('visible');
- 
-             // Eliminar corazón tras la animación
-             setTimeout(() => heart.remove(), 1500);
-         });
- 
-         // Reiniciar transform cuando cambie tamaño para evitar posiciones rotas
-         window.addEventListener('resize', () => {
-             noBtn.style.transform = 'translate(-50%, -50%)';
-         });
-    </script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const message = document.getElementById("message");
+
+function moveButton() {
+
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+}
+
+document.addEventListener("mousemove", (e) => {
+
+    const rect = noBtn.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const distance = Math.hypot(
+        e.clientX - centerX,
+        e.clientY - centerY
+    );
+
+    if(distance < 120){
+        moveButton();
+    }
+});
+
+noBtn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    moveButton();
+});
+
+noBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    moveButton();
+});
+
+yesBtn.addEventListener("click", () => {
+
+    message.style.display = "block";
+
+    for(let i = 0; i < 20; i++){
+
+        const heart = document.createElement("div");
+
+        heart.innerHTML = "❤️";
+        heart.classList.add("heart");
+
+        heart.style.left = Math.random() * window.innerWidth + "px";
+        heart.style.top = window.innerHeight + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 3000);
+    }
+});
+
+</script>
+
 </body>
 </html>
