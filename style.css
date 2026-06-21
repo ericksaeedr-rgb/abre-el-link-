@@ -148,3 +148,13 @@ button{
 ```
 
 }
+
+.metal-img{
+    width:220px;
+    max-width:80%;
+    margin-bottom:15px;
+    border-radius:20px;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}
