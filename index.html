@@ -42,16 +42,13 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const message = document.getElementById("message");
 
-function moveButton(){
+function moveButton() {
 
-    const container = document.querySelector(".buttons");
+    const x = Math.random() * 220 - 110;
+    const y = Math.random() * 80 - 40;
 
-    const maxX = container.clientWidth - noBtn.offsetWidth;
-
-    const x = Math.random() * maxX;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = "10px";
+    noBtn.style.transform =
+        `translate(${x}px, ${y}px)`;
 }
 
 document.addEventListener("mousemove",(e)=>{
